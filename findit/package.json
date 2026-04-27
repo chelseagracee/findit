@@ -1,9 +1,0 @@
-{
-  "name": "findit-fashion",
-  "version": "1.0.0",
-  "description": "FINDIT — fashion search app",
-  "private": true,
-  "engines": {
-    "node": ">=18"
-  }
-}
