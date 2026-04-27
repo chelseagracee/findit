@@ -231,8 +231,8 @@ textarea::placeholder{color:var(--dim);}
       <div class="pill" onclick="fillEx(this)">🖤 Black lace mini, London dinner date, 12°C, sexy-classy, £80–£200</div>
       <div class="pill" onclick="fillEx(this)">🌸 Floral midi, summer garden party, feminine & romantic, under $120</div>
       <div class="pill" onclick="fillEx(this)">💼 Smart blazer, job interview, confident not boring, $150–$300</div>
-      <div class="pill" onclick="fillEx(this)">☀️ Chic one-piece swimsuit, Amalfi Coast, not sporty, under $180</div>
-      <div class="pill" onclick="fillEx(this)">🍷 Cozy date night, NYC autumn, museum or wine bar, under $200</div>
+      <div class="pill" onclick="fillEx(this)">👙Chic one-piece swimsuit, Amalfi Coast, not sporty, under $180</div>
+      <div class="pill" onclick="fillEx(this)">🍸 Cozy date night, NYC autumn, museum or wine bar, under $200</div>
     </div>
   </div>
 </div>
@@ -353,8 +353,16 @@ Rules:
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
     });
     const data=await resp.json();
-    const raw=data.content.map(b=>b.text||'').join('');
-    const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    let result;
+    // Handle both shapes: direct JSON object, or wrapped in content array
+    if(data.items){
+      result=data;
+    } else if(data.content){
+      const raw=data.content.map(b=>b.text||'').join('');
+      result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    } else {
+      throw new Error('Unexpected response shape');
+    }
     clearInterval(lt);
     renderFeed(result);
   }catch(err){
